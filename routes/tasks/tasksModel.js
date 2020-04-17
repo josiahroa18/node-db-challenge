@@ -7,7 +7,9 @@ module.exports = {
 }
 
 function getTasks(){
-    return db('tasks')
+    return db.select('projects.name', 'projects.description', 'tasks.description', 'tasks.completed')
+        .from('tasks')
+        .join('projects', 'projectId', 'projects.id');
 }
 
 function findById(id){
@@ -18,7 +20,7 @@ function findById(id){
 
 function addTask(task){
     return db('tasks')
-        .insert(task)
+        .insert(task, 'id')
         .then(id => {
             return findById(id[0]);
         })
